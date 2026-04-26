@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: through-their-eyes
+    runtime: static
+    buildCommand: echo "Using committed Unity WebGL build"
+    staticPublishPath: ./RenderSite
+    pullRequestPreviewsEnabled: false

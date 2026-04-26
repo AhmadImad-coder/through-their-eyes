@@ -18,5 +18,11 @@ namespace OCDSimulation
         public float finalAnxiety = 0f;
         public int timesReachedMaxAnxiety = 0;
         public int attemptsAfterCalming = 0;
+
+        // Enhanced tracking fields
+        public bool groundingUsed = false;
+        public bool bothTechniquesUsed = false;
+        public float anxietyAtStage3Entry = 0f;
+        public int journalEntries = 0;
     }
 }

@@ -245,13 +245,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6475368b819cc4e0babc4672c62f0510, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OCDSimulation.SimulationBootstrap
-  roomWidth: 12
-  roomLength: 14
-  roomHeight: 4
-  seatedCompletionSeconds: 150
-  mindfulnessThreshold: 60
-  mindfulnessDurationSeconds: 12
-  mindfulnessNoCompulsionSeconds: 8
+  roomWidth: 15
+  roomLength: 18
+  roomHeight: 4.5
+  ambientLoop: {fileID: 8300000, guid: 0f5427d0271a946ee955b2e24649176c, type: 3}
+  chatterLoop: {fileID: 8300000, guid: 0f5427d0271a946ee955b2e24649176c, type: 3}
+  machineLoop: {fileID: 8300000, guid: d75aa689677f7468985d637e589e0304, type: 3}
+  clinkLoop: {fileID: 0}
+  whisperLoop: {fileID: 8300000, guid: 9f90dde551441468b833e1b3f319f93e, type: 3}
+  breathingLoop: {fileID: 8300000, guid: ea6fb1f861982444b820bece9ba0fb08, type: 3}
+  ambientVolume: 0.4
+  chatterVolume: 0.351
+  machineVolume: 0.22
+  clinkVolume: 0.2
+  whisperVolume: 0.5
+  breathingVolume: 0.6
+  machineBurstDuration: 3.5
+  machineSilenceDuration: 12
+  clinkBurstDuration: 1.5
+  clinkSilenceDuration: 7
+  streetAmbientLoop: {fileID: 8300000, guid: 1ef34c7dffd76462f9fd2887b42472ee, type: 3}
+  footstepLoop: {fileID: 0}
+  streetVolume: 0.5
+  footstepVolume: 0.25
+  floorTexture: {fileID: 2800000, guid: 58b5648876ffb44d7bb8003370061dbd, type: 3}
+  wallTexture: {fileID: 2800000, guid: 2ddd344cff7564de1b740d8e5c99a80d, type: 3}
+  tableTexture: {fileID: 2800000, guid: b91d2e4bfb4494b86a336050aa8a7828, type: 3}
+  friendTablePos: {x: -3.2, y: 0, z: -2.5}
+  friendSeatY: 0.45
+  friendScale: 1
+  emmaOffset: {x: -55, y: 0, z: -0.72}
+  jakeOffset: {x: 0.55, y: 0, z: -0.72}
+  miaOffset: {x: -0.9, y: 0, z: 0.1}
+  bgSeatY: 0.45
+  stoolSeatY: 0.78
+  waiterWalkSpeed: 1.6
+  w1CounterPoint: {x: 4.8, y: 0, z: 7}
+  w1TablePoint: {x: 5.25, y: 0, z: 1.5}
+  w2CounterPoint: {x: 5, y: 0, z: 7}
+  w2TablePoint: {x: 4.75, y: 0, z: -3}
+  playerStartPos: {x: 0, y: 1, z: -6}
 --- !u!4 &952858813
 Transform:
   m_ObjectHideFlags: 0

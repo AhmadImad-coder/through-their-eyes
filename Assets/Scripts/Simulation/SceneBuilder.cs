@@ -793,17 +793,18 @@ namespace OCDSimulation
         private static void MakeChildLocal(PrimitiveType type, string name, Transform parent,
                                             Vector3 localPos, Vector3 localScale, Color color)
         {
-            GameObject go = GameObject.CreatePrimitive(type);
+            GameObject go = RuntimePrimitive.Create(type);
             go.name = name;
             go.transform.SetParent(parent, false);
             go.transform.localPosition = localPos;
             go.transform.localScale    = localScale;
             Object.Destroy(go.GetComponent<Collider>());
             Renderer rend = go.GetComponent<Renderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            Shader shader = FindRuntimeShader();
             Material mat = new Material(shader);
             mat.color = color;
             if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
+            if (mat.HasProperty("_Color"))     mat.SetColor("_Color", color);
             rend.material = mat;
         }
 
@@ -1091,7 +1092,7 @@ namespace OCDSimulation
         private GameObject MakeCube(string name, Vector3 pos, Vector3 scale,
                                      Color color, float smoothness = 0.15f)
         {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject go = RuntimePrimitive.Create(PrimitiveType.Cube);
             go.name = name;
             go.transform.position   = pos;
             go.transform.localScale = scale;
@@ -1103,7 +1104,7 @@ namespace OCDSimulation
                                       Vector3 localPos, Vector3 localScale,
                                       Color color, float smoothness = 0.2f)
         {
-            GameObject go = GameObject.CreatePrimitive(type);
+            GameObject go = RuntimePrimitive.Create(type);
             go.name = name;
             go.transform.SetParent(parent, false);
             go.transform.localPosition = localPos;
@@ -1135,9 +1136,7 @@ namespace OCDSimulation
         private Material MakeMaterial(Color color, float smoothness = 0.2f,
                                        Texture2D tex = null)
         {
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit")
-                         ?? Shader.Find("Standard")
-                         ?? Shader.Find("Diffuse");
+            Shader shader = FindRuntimeShader();
             Material mat = new Material(shader);
             mat.color = color;
             if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);
@@ -1164,6 +1163,17 @@ namespace OCDSimulation
                 mat.renderQueue = 3000;
             }
             return mat;
+        }
+
+        private static Shader FindRuntimeShader()
+        {
+            return Shader.Find("Universal Render Pipeline/Lit")
+                ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                ?? Shader.Find("Standard")
+                ?? Shader.Find("Diffuse")
+                ?? Shader.Find("Unlit/Color")
+                ?? Shader.Find("Sprites/Default")
+                ?? Shader.Find("Hidden/Internal-Colored");
         }
 
         private static void ConfigureWorldText(TextMesh textMesh, Color color, int fontSize)

@@ -62,6 +62,7 @@ namespace OCDSimulation
         private string selectedOrder        = null;
         private GameObject orderWaiter      = null;
         private int   recoveryScratchAttempts = 0;
+        private bool  initialized           = false;
 
         private Vector3    camLocalPos;
         private Quaternion camLocalRot;
@@ -97,7 +98,20 @@ namespace OCDSimulation
         // ══════════════════════════════════════════════════════════════════════
         private void Start()
         {
+            Initialize();
+        }
+
+        public void Initialize()
+        {
+            if (initialized) return;
+            initialized = true;
+
             if (ui == null) ui = FindFirstObjectByType<UIManager>();
+            if (ui == null)
+            {
+                Debug.LogError("[GameDirector] UIManager is missing; cannot start simulation UI.");
+                return;
+            }
 
             ui.OnStartClicked     += StartSimulation;
             ui.OnLookUnderTable   += LookUnderTable;
@@ -110,7 +124,10 @@ namespace OCDSimulation
             ui.OnNarrativeComplete += OnNarrativeComplete;
             ui.OnOrderSelected    += OnOrderSelected;
 
-            settingsManager.OnSettingsClosed += RestoreInputAfterSettings;
+            if (settingsManager != null)
+                settingsManager.OnSettingsClosed += RestoreInputAfterSettings;
+            else
+                Debug.LogWarning("[GameDirector] SettingsManager missing; settings close restore callback disabled.");
 
             if (playerCamera != null)
             {
@@ -877,7 +894,7 @@ namespace OCDSimulation
         private void AddMenuProp(Transform waiter)
         {
             if (waiter == null) return;
-            GameObject menu = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject menu = RuntimePrimitive.Create(PrimitiveType.Cube);
             menu.name = "HeldMenu";
             menu.transform.SetParent(waiter, false);
             menu.transform.localPosition = new Vector3(-0.22f, 0.58f, 0.24f);
@@ -885,10 +902,17 @@ namespace OCDSimulation
             menu.transform.localScale = new Vector3(0.22f, 0.02f, 0.30f);
             Destroy(menu.GetComponent<Collider>());
             Renderer rend = menu.GetComponent<Renderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit") ?? Shader.Find("Standard");
+            Shader shader = Shader.Find("Universal Render Pipeline/Lit")
+                         ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                         ?? Shader.Find("Standard")
+                         ?? Shader.Find("Diffuse")
+                         ?? Shader.Find("Unlit/Color")
+                         ?? Shader.Find("Sprites/Default")
+                         ?? Shader.Find("Hidden/Internal-Colored");
             Material mat = new Material(shader);
             mat.color = new Color(0.92f, 0.82f, 0.58f);
             if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", mat.color);
+            if (mat.HasProperty("_Color"))     mat.SetColor("_Color", mat.color);
             rend.material = mat;
         }
 

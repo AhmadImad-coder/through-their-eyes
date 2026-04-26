@@ -389,6 +389,7 @@ namespace OCDSimulation
             director.npcDialogue    = npcDlg;
             director.journal        = journal;
             director.settingsManager = settings;
+            director.Initialize();
         }
 
         // ── Factory helpers ───────────────────────────────────────────────────
@@ -639,6 +640,8 @@ namespace OCDSimulation
         private void DisableOtherCameras(Camera playerCamera)
         {
             if (playerCamera == null) return;
+            playerCamera.enabled = true;
+            playerCamera.depth = 10f;
             Camera[] cameras = FindObjectsByType<Camera>(FindObjectsSortMode.None);
             foreach (Camera cam in cameras)
             {

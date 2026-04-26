@@ -737,7 +737,7 @@ namespace OCDSimulation
                                        Transform parent, Vector3 worldPos,
                                        Vector3 scale, Color color)
         {
-            GameObject go = GameObject.CreatePrimitive(type);
+            GameObject go = RuntimePrimitive.Create(type);
             go.name = name;
             if (parent != null)
             {
@@ -755,7 +755,7 @@ namespace OCDSimulation
 
         private void Create(string name, Vector3 pos, Vector3 scale, Color color)
         {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            GameObject go = RuntimePrimitive.Create(PrimitiveType.Cube);
             go.name = name;
             go.transform.SetParent(streetRoot, false);
             go.transform.position   = pos;
@@ -766,8 +766,12 @@ namespace OCDSimulation
         private Material MakeMaterial(Color color)
         {
             Shader shader = Shader.Find("Universal Render Pipeline/Lit")
+                         ?? Shader.Find("Universal Render Pipeline/Simple Lit")
                          ?? Shader.Find("Standard")
-                         ?? Shader.Find("Diffuse");
+                         ?? Shader.Find("Diffuse")
+                         ?? Shader.Find("Unlit/Color")
+                         ?? Shader.Find("Sprites/Default")
+                         ?? Shader.Find("Hidden/Internal-Colored");
             Material mat = new Material(shader);
             mat.color = color;
             if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", color);

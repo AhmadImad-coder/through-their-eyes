@@ -340,7 +340,7 @@ namespace OCDSimulation
                                             Vector3 localScale, Color color,
                                             Quaternion? localRot = null)
         {
-            GameObject go = GameObject.CreatePrimitive(type);
+            GameObject go = RuntimePrimitive.Create(type);
             go.name = name;
             go.transform.SetParent(parent, false);
             go.transform.localPosition = localPos;
@@ -363,8 +363,12 @@ namespace OCDSimulation
         {
             if (_shader == null)
                 _shader = Shader.Find("Universal Render Pipeline/Lit")
+                       ?? Shader.Find("Universal Render Pipeline/Simple Lit")
                        ?? Shader.Find("Standard")
-                       ?? Shader.Find("Diffuse");
+                       ?? Shader.Find("Diffuse")
+                       ?? Shader.Find("Unlit/Color")
+                       ?? Shader.Find("Sprites/Default")
+                       ?? Shader.Find("Hidden/Internal-Colored");
 
             Material mat = new Material(_shader);
             mat.color = color;

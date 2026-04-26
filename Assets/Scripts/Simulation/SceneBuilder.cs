@@ -1167,13 +1167,14 @@ namespace OCDSimulation
 
         private static Shader FindRuntimeShader()
         {
-            return Shader.Find("Universal Render Pipeline/Lit")
-                ?? Shader.Find("Universal Render Pipeline/Simple Lit")
-                ?? Shader.Find("Standard")
-                ?? Shader.Find("Diffuse")
+            return Shader.Find("Universal Render Pipeline/Unlit")
                 ?? Shader.Find("Unlit/Color")
                 ?? Shader.Find("Sprites/Default")
-                ?? Shader.Find("Hidden/Internal-Colored");
+                ?? Shader.Find("Hidden/Internal-Colored")
+                ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                ?? Shader.Find("Universal Render Pipeline/Lit")
+                ?? Shader.Find("Standard")
+                ?? Shader.Find("Diffuse");
         }
 
         private static void ConfigureWorldText(TextMesh textMesh, Color color, int fontSize)

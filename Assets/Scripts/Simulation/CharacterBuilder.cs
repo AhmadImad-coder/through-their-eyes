@@ -362,13 +362,14 @@ namespace OCDSimulation
         private static Material MakeMat(Color color)
         {
             if (_shader == null)
-                _shader = Shader.Find("Universal Render Pipeline/Lit")
-                       ?? Shader.Find("Universal Render Pipeline/Simple Lit")
-                       ?? Shader.Find("Standard")
-                       ?? Shader.Find("Diffuse")
+                _shader = Shader.Find("Universal Render Pipeline/Unlit")
                        ?? Shader.Find("Unlit/Color")
                        ?? Shader.Find("Sprites/Default")
-                       ?? Shader.Find("Hidden/Internal-Colored");
+                       ?? Shader.Find("Hidden/Internal-Colored")
+                       ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                       ?? Shader.Find("Universal Render Pipeline/Lit")
+                       ?? Shader.Find("Standard")
+                       ?? Shader.Find("Diffuse");
 
             Material mat = new Material(_shader);
             mat.color = color;

@@ -560,8 +560,9 @@ namespace OCDSimulation
         }
 
         // ── Simulation start / restart ────────────────────────────────────────
-        private void StartSimulation()
+        public void StartSimulation()
         {
+            ui.ShowNarrative(false);
             ui.ShowHome(false);
             ui.ShowHUD(true);
             sessionStartTime     = Time.time;
@@ -902,13 +903,14 @@ namespace OCDSimulation
             menu.transform.localScale = new Vector3(0.22f, 0.02f, 0.30f);
             Destroy(menu.GetComponent<Collider>());
             Renderer rend = menu.GetComponent<Renderer>();
-            Shader shader = Shader.Find("Universal Render Pipeline/Lit")
-                         ?? Shader.Find("Universal Render Pipeline/Simple Lit")
-                         ?? Shader.Find("Standard")
-                         ?? Shader.Find("Diffuse")
+            Shader shader = Shader.Find("Universal Render Pipeline/Unlit")
                          ?? Shader.Find("Unlit/Color")
                          ?? Shader.Find("Sprites/Default")
-                         ?? Shader.Find("Hidden/Internal-Colored");
+                         ?? Shader.Find("Hidden/Internal-Colored")
+                         ?? Shader.Find("Universal Render Pipeline/Simple Lit")
+                         ?? Shader.Find("Universal Render Pipeline/Lit")
+                         ?? Shader.Find("Standard")
+                         ?? Shader.Find("Diffuse");
             Material mat = new Material(shader);
             mat.color = new Color(0.92f, 0.82f, 0.58f);
             if (mat.HasProperty("_BaseColor")) mat.SetColor("_BaseColor", mat.color);

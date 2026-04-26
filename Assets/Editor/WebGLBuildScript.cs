@@ -49,6 +49,19 @@ public static class WebGLBuildScript
         if (summary.result != BuildResult.Succeeded)
             throw new System.Exception($"WebGL build failed: {summary.result}");
 
+        PatchIndexHtml();
         Debug.Log($"WebGL build succeeded: {summary.totalSize} bytes -> {OutputPath}");
+    }
+
+    private static void PatchIndexHtml()
+    {
+        string indexPath = Path.Combine(OutputPath, "index.html");
+        if (!File.Exists(indexPath)) return;
+
+        string html = File.ReadAllText(indexPath);
+        const string needle = "}).then((unityInstance) => {";
+        const string replacement = "}).then((unityInstance) => {\n                window.unityInstance = unityInstance;";
+        if (!html.Contains("window.unityInstance"))
+            File.WriteAllText(indexPath, html.Replace(needle, replacement));
     }
 }

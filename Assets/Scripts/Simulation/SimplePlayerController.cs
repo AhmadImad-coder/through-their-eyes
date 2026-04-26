@@ -160,9 +160,12 @@ namespace OCDSimulation
         // Keyboard.current APIs still work — so we try both every frame.
         private bool KeyHeld(KeyCode legacy, string newSystemKeyName)
         {
-            // Legacy Input (works when Active Input Handling = Both/Legacy)
             bool legacyHeld = false;
-            try { legacyHeld = Input.GetKey(legacy); } catch { legacyHeld = false; }
+
+            #if ENABLE_LEGACY_INPUT_MANAGER
+            // Legacy Input is only safe to call when Unity compiled it in.
+            legacyHeld = Input.GetKey(legacy);
+            #endif
 
             #if ENABLE_INPUT_SYSTEM
             // New Input System (works when Active Input Handling = Both/New)
@@ -180,11 +183,13 @@ namespace OCDSimulation
             float h = 0f, v = 0f;
             bool usedLegacy = false, usedNew = false;
 
+            #if ENABLE_LEGACY_INPUT_MANAGER
             // --- Legacy keyboard read ---
             if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow))    { v += 1f; usedLegacy = true; }
             if (Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.DownArrow))  { v -= 1f; usedLegacy = true; }
             if (Input.GetKey(KeyCode.D) || Input.GetKey(KeyCode.RightArrow)) { h += 1f; usedLegacy = true; }
             if (Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.LeftArrow))  { h -= 1f; usedLegacy = true; }
+            #endif
 
             #if ENABLE_INPUT_SYSTEM
             // --- New Input System keyboard read ---
@@ -216,13 +221,20 @@ namespace OCDSimulation
                 if (d.sqrMagnitude > 0.0001f) return d * 0.08f;
             }
             #endif
-            // Fall back to legacy
+
+            #if ENABLE_LEGACY_INPUT_MANAGER
+            // Fall back to legacy only when compiled into this player.
             return new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            #else
+            return Vector2.zero;
+            #endif
         }
 
         private bool MouseLeftPressedThisFrame()
         {
+            #if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetMouseButtonDown(0)) return true;
+            #endif
             #if ENABLE_INPUT_SYSTEM
             if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame) return true;
             #endif
@@ -231,7 +243,9 @@ namespace OCDSimulation
 
         private bool EscapePressedThisFrame()
         {
+            #if ENABLE_LEGACY_INPUT_MANAGER
             if (Input.GetKeyDown(KeyCode.Escape)) return true;
+            #endif
             #if ENABLE_INPUT_SYSTEM
             if (Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame) return true;
             #endif
